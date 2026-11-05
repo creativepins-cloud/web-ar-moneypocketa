@@ -29,12 +29,12 @@
     <script>
       let score = 0;
 
-      // Komponen untuk logik objek duit raya yang boleh ditekan
+      // Komponen untuk logik objek yang boleh ditekan dan bertukar kedudukan
       AFRAME.registerComponent('duit-raya', {
         init: function () {
           const el = this.el;
           
-          // Apabila objek duit disentuh/ditekan
+          // Apabila objek 3D disentuh/ditekan pada skrin telefon
           el.addEventListener('click', () => {
             score += 10;
             document.getElementById('score-value').innerText = score;
@@ -42,7 +42,7 @@
             // Alihkan kedudukan objek secara rawak di atas sampul selepas ditekan
             const randomX = (Math.random() - 0.5) * 0.8;
             const randomZ = (Math.random() - 0.5) * 0.8;
-            el.setAttribute('position', `${randomX} 0.8 ${randomZ}`);
+            el.setAttribute('position', `${randomX} 0.5 ${randomZ}`);
           });
         }
       });
@@ -53,38 +53,38 @@
     <div id="score-board">Duit Raya Terkumpul: RM <span id="score-value">0</span></div>
 
     <a-scene 
-      mindar-image="imageTargetSrc: ./targets.mind;" 
+      mindar-image="imageTargetSrc: ./target.mind;" 
       color-space="sRGB" 
       renderer="colorManagement: true, physicallyCorrectLights" 
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false">
       
       <a-assets>
-        <!-- Anda boleh tukar model glb ini kepada model sampul/duit raya anda -->
-        <a-asset-item id="moneyModel" src="./model.glb"></a-asset-item>
+        <!-- Kekalkan fail model asal anda: model.glb -->
+        <a-asset-item id="myModel" src="./model.glb"></a-asset-item>
       </a-assets>
 
       <!-- Kamera dengan tetapan pengesan klik (raycaster) -->
       <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse;" raycaster="objects: [duit-raya]"></a-camera>
 
-      <!-- Sasaran Imej (Sampul Duit Raya Fizikal) -->
+      <!-- Sasaran Imej (Sampul Duit Raya Fizikal - menggunakan targets.mind asal) -->
       <a-entity mindar-image-target="targetIndex: 0">
         
-        <!-- Objek Duit Raya 1 (Interaktif & Berputar) -->
+        <!-- Objek 1 (Interaktif & Berputar, saiz dibesarkan sedikit kepada 2) -->
         <a-gltf-model 
-          src="#moneyModel" 
-          position="0 0.5 0" 
-          scale="1.5 1.5 1.5" 
+          src="#myModel" 
+          position="0 0.3 0" 
+          scale="2 2 2" 
           rotation="0 0 0"
           duit-raya
           animation="property: rotation; to: 0 360 0; loop: true; dur: 3000; easing: linear">
         </a-gltf-model>
 
-        <!-- Objek Duit Raya 2 (Kedudukan berbeza) -->
+        <!-- Objek 2 (Kedudukan berbeza di atas sampul) -->
         <a-gltf-model 
-          src="#moneyModel" 
-          position="0.3 0.8 -0.2" 
-          scale="1.2 1.2 1.2" 
+          src="#myModel" 
+          position="0.2 0.6 -0.1" 
+          scale="1.5 1.5 1.5" 
           rotation="0 0 0"
           duit-raya
           animation="property: rotation; to: 360 360 0; loop: true; dur: 4000; easing: linear">
