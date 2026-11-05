@@ -2,13 +2,25 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WebAR MindAR Demo</title>
+    <title>WebAR MindAR Interactive</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    
+    <!-- Script tambahan untuk interaksi klik -->
+    <script>
+      AFRAME.registerComponent('click-handler', {
+        init: function () {
+          this.el.addEventListener('click', () => {
+            alert("Tahniah! Model 3D anda berjaya ditekan secara interaktif.");
+            // Anda boleh tambah kod animasi atau putaran di sini
+          });
+        }
+      });
+    </script>
   </head>
   <body>
     <a-scene 
-      mindar-image="imageTargetSrc: ./target.mind;" 
+      mindar-image="imageTargetSrc: ./targets.mind;" 
       color-space="sRGB" 
       renderer="colorManagement: true, physicallyCorrectLights" 
       vr-mode-ui="enabled: false" 
@@ -18,10 +30,19 @@
         <a-asset-item id="myModel" src="./model.glb"></a-asset-item>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <!-- Kamera disetkan dengan cursor untuk mengesan sentuhan (raycaster) -->
+      <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse;" raycaster="objects: [click-handler]"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model src="#myModel" position="0 0 0" scale="0.5 0.5 0.5" rotation="0 0 0"></a-gltf-model>
+        <!-- Ubah scale kepada 3 atau lebih besar, dan masukkan click-handler -->
+        <a-gltf-model 
+          src="#myModel" 
+          position="0 0 0" 
+          scale="3 3 3" 
+          rotation="0 0 0"
+          click-handler
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear">
+        </a-gltf-model>
       </a-entity>
     </a-scene>
   </body>
